@@ -288,6 +288,7 @@ en:
   field_assignable: Issues can be assigned to this role
   field_redirect_existing_links: Redirect existing links
   field_estimated_hours: Estimated time
+  field_spent_hours: Time spent
   field_column_names: Columns
   field_time_entries: Log time
   field_time_zone: Time zone

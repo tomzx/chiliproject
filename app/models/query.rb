@@ -137,6 +137,7 @@ class Query < ActiveRecord::Base
   def initialize(attributes = nil)
     super attributes
     self.filters ||= { 'status_id' => {:operator => "o", :values => [""]} }
+    self.class.add_available_column(QueryColumn.new(:spent_hours)) if User.current.allowed_to?(:view_time_entries, nil, :global => true)
   end
 
   def after_initialize
@@ -345,6 +346,10 @@ class Query < ActiveRecord::Base
 
   def has_default_columns?
     column_names.nil? || column_names.empty?
+  end
+  
+  def has_available_column?(column_name)
+    available_columns.collect{|x| x.name }.include?(column_name)
   end
 
   def sort_criteria=(arg)
