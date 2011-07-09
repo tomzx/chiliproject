@@ -1,6 +1,6 @@
 <div class="contextual">
-<%= link_to(l(:button_edit), {:action => 'edit', :id => @page.title}, :class => 'icon icon-edit') %>
-<%= link_to(l(:label_history), {:action => 'history', :id => @page.title}, :class => 'icon icon-history') %>
+<%= link_to_if_authorized(l(:button_edit), {:action => 'edit', :id => @page.title}, :class => 'icon icon-edit', :accesskey => accesskey(:edit)) if @annotate.content.version == @page.content.version %>
+<%= link_to_if_authorized(l(:label_history), {:action => 'history', :id => @page.title}, :class => 'icon icon-history') %>
 </div>
 
 <h2><%= @page.pretty_title %></h2>
