@@ -2,6 +2,7 @@
 
 <div class="box">
 <% form_tag({}, :method => :get) do %>
+<%= label_tag "search-input", l(:description_search), :class => "hidden-for-sighted" %>
 <p><%= text_field_tag 'q', @question, :size => 60, :id => 'search-input' %>
 <%= javascript_tag "Field.focus('search-input')" %>
 <%= project_select_tag %>
@@ -31,9 +32,9 @@
       <% @results.each do |e| %>
         <dt class="<%= e.event_type %>">
           <%= content_tag('span', h(e.project), :class => 'project') unless @project == e.project %>
-          <%= link_to highlight_tokens(truncate(e.event_title, :length => 255), @tokens), e.event_url %>
+          <%= link_to highlight_tokens(truncate(h(e.event_title), :length => 255), @tokens), e.event_url %>
         </dt>
-        <dd><span class="description"><%= highlight_tokens(e.event_description, @tokens) %></span>
+        <dd><span class="description"><%= highlight_tokens(h(e.event_description), @tokens) %></span>
         <span class="author"><%= format_time(e.event_datetime) %></span></dd>
       <% end %>
     </dl>

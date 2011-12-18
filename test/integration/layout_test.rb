@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -58,5 +59,16 @@ class LayoutTest < ActionController::IntegrationTest
     assert_tag :script,
       :attributes => {:src => %r{^/javascripts/jstoolbar/textile.js}},
       :parent => {:tag => 'head'}
+  end
+
+  test "page titles should be properly escaped" do
+    project = Project.generate(:name => "C&A")
+
+    with_settings :app_title => '<3' do
+      get "/projects/#{project.to_param}"
+
+      assert_select "title", /C&amp;A/
+      assert_select "title", /&lt;3/
+    end
   end
 end

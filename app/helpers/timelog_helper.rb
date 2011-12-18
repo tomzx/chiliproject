@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -125,7 +126,7 @@ module TimelogHelper
     elsif k = @available_criterias[criteria][:klass]
       obj = k.find_by_id(value.to_i)
       if obj.is_a?(Issue)
-        obj.visible? ? "#{obj.tracker} ##{obj.id}: #{obj.subject}" : "##{obj.id}"
+        obj.visible? ? h("#{obj.tracker} ##{obj.id}: #{obj.subject}") : h("##{obj.id}")
       else
         obj
       end

@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -82,7 +83,7 @@ class Changeset < ActiveRecord::Base
       nil
     end
   end
-  
+
   # Committer of the Changeset
   #
   # Attribute reader for committer that encodes the committer string to
@@ -278,7 +279,7 @@ class Changeset < ActiveRecord::Base
         end
       end
     else
-      
+
       txtar = ""
       begin
         txtar += Iconv.new('UTF-8', normalized_encoding).iconv(str)

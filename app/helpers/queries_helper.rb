@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -20,7 +21,7 @@ module QueriesHelper
   def column_header(column)
     column.sortable ? sort_header_tag(column.name.to_s, :caption => column.caption,
                                                         :default_order => column.default_order) :
-                      content_tag('th', column.caption)
+                      content_tag('th', h(column.caption))
   end
 
   def column_content(column, issue)
@@ -41,7 +42,7 @@ module QueriesHelper
       if column.name == :done_ratio
         progress_bar(value, :width => '80px')
       else
-        value.to_s
+        h(value.to_s)
       end
     when 'User'
       link_to_user value

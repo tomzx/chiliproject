@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -400,6 +401,11 @@ class Issue < ActiveRecord::Base
     !due_date.nil? && (due_date < Date.today) && !status.is_closed?
   end
 
+  # Returns true if the issue is due today and not closed
+  def due_today?
+    !due_date.nil? && (due_date == Date.today) && !status.is_closed?
+  end
+
   # Is the amount of work done less than it should for the due date
   def behind_schedule?
     return false if start_date.nil? || due_date.nil?
@@ -549,12 +555,13 @@ class Issue < ActiveRecord::Base
   def nested_set_span
     rgt - lft
   end
-  
+
   # Returns a string of css classes that apply to the issue
   def css_classes
     s = "issue status-#{status.position} priority-#{priority.position}"
     s << ' closed' if closed?
     s << ' overdue' if overdue?
+    s << ' due-today' if due_today?
     s << ' child' if child?
     s << ' parent' unless leaf?
     s << ' created-by-me' if User.current.logged? && author_id == User.current.id

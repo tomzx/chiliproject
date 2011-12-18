@@ -85,6 +85,7 @@ Event.observe(document,"dom:loaded", apply_filters_observer);
         <label for="cb_<%= field %>"><%= filter[1][:name] || l(("field_"+field.to_s.gsub(/\_id$/, "")).to_sym) %></label>
     </td>
     <td style="width:150px;">
+        <%= label_tag "op_#{field}", l(:description_filter), :class => "hidden-for-sighted" %>
         <%= select_tag "op[#{field}]", options_for_select(operators_for_select(options[:type]), query.operator_for(field)), :id => "operators_#{field}", :onchange => "toggle_operator('#{field}');", :class => "select-small", :style => "vertical-align: top;" %>
     </td>
     <td>
@@ -96,11 +97,11 @@ Event.observe(document,"dom:loaded", apply_filters_observer);
         </select>
         <%= link_to_function image_tag('bullet_toggle_plus.png'), "toggle_multi_select('#{field}');", :style => "vertical-align: bottom;" %>
     <% when :date, :date_past %>
-        <%= text_field_tag "v[#{field}][]", query.values_for(field), :id => "values_#{field}", :size => 3, :class => "select-small" %> <%= l(:label_day_plural) %>
+        <%= text_field_tag "v[#{field}][]", query.values_for(field).try(:first), :id => "values_#{field}", :size => 3, :class => "select-small" %> <%= l(:label_day_plural) %>
     <% when :string, :text %>
-        <%= text_field_tag "v[#{field}][]", query.values_for(field), :id => "values_#{field}", :size => 30, :class => "select-small" %>
+        <%= text_field_tag "v[#{field}][]", query.values_for(field).try(:first), :id => "values_#{field}", :size => 30, :class => "select-small" %>
     <% when :integer %>
-        <%= text_field_tag "v[#{field}][]", query.values_for(field), :id => "values_#{field}", :size => 3, :class => "select-small" %>
+        <%= text_field_tag "v[#{field}][]", query.values_for(field).try(:first), :id => "values_#{field}", :size => 3, :class => "select-small" %>
     <% end %>
     </div>
     <script type="text/javascript">toggle_filter('<%= field %>');</script>

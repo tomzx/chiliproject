@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -43,6 +44,7 @@ module SearchHelper
     options << [l(:label_my_projects), 'my_projects'] unless User.current.memberships.empty?
     options << [l(:label_and_its_subprojects, @project.name), 'subprojects'] unless @project.nil? || @project.descendants.active.empty?
     options << [@project.name, ''] unless @project.nil?
+    label_tag("scope", l(:description_project_scope), :class => "hidden-for-sighted") +
     select_tag('scope', options_for_select(options, params[:scope].to_s)) if options.size > 1
   end
 
@@ -53,7 +55,7 @@ module SearchHelper
       c = results_by_type[t]
       next if c == 0
       text = "#{type_label(t)} (#{c})"
-      links << link_to(text, :q => params[:q], :titles_only => params[:title_only], :all_words => params[:all_words], :scope => params[:scope], t => 1)
+      links << link_to(h(text), :q => params[:q], :titles_only => params[:title_only], :all_words => params[:all_words], :scope => params[:scope], t => 1)
     end
     ('<ul>' + links.map {|link| content_tag('li', link)}.join(' ') + '</ul>') unless links.empty?
   end

@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -18,7 +19,7 @@ class Change < ActiveRecord::Base
   before_save :init_path
 
   delegate :repository_encoding, :to => :changeset, :allow_nil => true, :prefix => true
-  
+
   def relative_path
     changeset.repository.relative_path(path)
   end
@@ -30,7 +31,7 @@ class Change < ActiveRecord::Base
 
   def from_path
     # TODO: shouldn't access Changeset#to_utf8 directly
-    self.path = Changeset.to_utf8(read_attribute(:from_path), changeset_repository_encoding)
+    self.from_path = Changeset.to_utf8(read_attribute(:from_path), changeset_repository_encoding)
   end
 
   def init_path

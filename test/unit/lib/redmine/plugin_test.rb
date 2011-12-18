@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -68,6 +69,29 @@ class Redmine::PluginTest < ActiveSupport::TestCase
       test.assert_raise Redmine::PluginRequirementError do
         requires_redmine(:version => ['98.0.0', '99.0.0'])
       end
+    end
+  end
+
+  def test_requires_chiliproject
+    test = self
+    version = Redmine::VERSION.to_semver
+
+    @klass.register :foo do
+      test.assert requires_chiliproject('>= 0.1')
+      test.assert requires_chiliproject(">= #{version}")
+      test.assert requires_chiliproject(version)
+      test.assert_raise Redmine::PluginRequirementError do
+        requires_chiliproject('>= 99.0.0')
+      end
+      test.assert_raise Redmine::PluginRequirementError do
+        requires_chiliproject('< 0.9')
+      end
+      requires_chiliproject('> 0.9', "<= 99.0.0")
+      test.assert_raise Redmine::PluginRequirementError do
+        requires_chiliproject('< 0.9', ">= 98.0.0")
+      end
+
+      test.assert requires_chiliproject("~> #{Redmine::VERSION.to_semver.gsub(/\d+$/, '0')}")
     end
   end
 

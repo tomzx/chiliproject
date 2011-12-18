@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -21,7 +22,7 @@ class TabularFormBuilder < ActionView::Helpers::FormBuilder
     super
   end
 
-  (field_helpers - %w(radio_button hidden_field fields_for) + %w(date_select)).each do |selector|
+  (field_helpers.map(&:to_s) - %w(radio_button hidden_field fields_for) + %w(date_select)).each do |selector|
     src = <<-END_SRC
     def #{selector}(field, options = {})
       label_for_field(field, options) + super
@@ -40,8 +41,7 @@ class TabularFormBuilder < ActionView::Helpers::FormBuilder
       text = options[:label].is_a?(Symbol) ? l(options[:label]) : options[:label]
       text ||= l(("field_" + field.to_s.gsub(/\_id$/, "")).to_sym)
       text += @template.content_tag("span", " *", :class => "required") if options.delete(:required)
-      @template.content_tag("label", text,
-                                     :class => (@object && @object.errors[field] ? "error" : nil),
-                                     :for => (@object_name.to_s + "_" + field.to_s))
+      @template.label(@object_name, field.to_s, text,
+                                     :class => (@object && @object.errors[field] ? "error" : nil))
   end
 end

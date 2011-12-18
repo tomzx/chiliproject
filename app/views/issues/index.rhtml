@@ -6,7 +6,7 @@
 </div>
 
 <h2><%= @query.new_record? ? l(:label_issue_plural) : h(@query.name) %></h2>
-<% html_title(@query.new_record? ? l(:label_issue_plural) : @query.name) %>
+<% html_title(@query.new_record? ? l(:label_issue_plural) : h(@query.name)) %>
 
 <% form_tag({ :controller => 'queries', :action => 'new' }, :id => 'query_form') do %>
     <%= hidden_field_tag('project_id', @project.to_param) if @project %>
@@ -26,7 +26,7 @@
 						<td><%= render :partial => 'queries/columns', :locals => {:query => @query} %></td>
 					</tr>
 					<tr>
-						<td><%= l(:field_group_by) %></td>
+						<td><label for='group_by'><%= l(:field_group_by) %></label></td>
 						<td><%= select_tag('group_by', options_for_select([[]] + @query.groupable_columns.collect {|c| [c.caption, c.name.to_s]}, @query.group_by)) %></td>
 					</tr>
 				</table>

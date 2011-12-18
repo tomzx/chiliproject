@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -18,7 +19,12 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.12' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.14' unless defined? RAILS_GEM_VERSION
+
+if RUBY_VERSION >= '1.9'
+  Encoding.default_external = 'UTF-8'
+  Encoding.default_internal = 'UTF-8'
+end
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -62,6 +68,13 @@ Rails::Initializer.run do |config|
   # Define your email configuration in configuration.yml instead.
   # It will automatically turn deliveries on
   config.action_mailer.perform_deliveries = false
+
+  # Insert vendor/chiliproject_plugins at the top of the plugin load paths
+  config.plugin_paths.insert(0, File.join(Rails.root, "vendor", "chiliproject_plugins"))
+
+  # Use redmine's custom plugin locater
+  require File.join(RAILS_ROOT, "lib/redmine_plugin_locator")
+  config.plugin_locators << RedminePluginLocator
 
   # Load any local configuration that is kept out of source control
   # (e.g. patches).

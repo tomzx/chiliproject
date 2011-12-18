@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -109,6 +109,18 @@ class TimelogControllerTest < ActionController::TestCase
     assert_equal 11, t.activity_id
     assert_equal 7.3, t.hours
     assert_equal 3, t.user_id
+  end
+
+  def test_create_without_log_time_permission_should_be_denied
+    @request.session[:user_id] = 2
+    Role.find_by_name('Manager').remove_permission! :log_time
+    post :create, :project_id => 1,
+                :time_entry => {:activity_id => '11',
+                                :issue_id => '',
+                                :spent_on => '2008-03-14',
+                                :hours => '7.3'}
+
+    assert_response 403
   end
 
   def test_update

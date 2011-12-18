@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -34,7 +35,7 @@ class UpdateJournalsForActsAsJournalized < ActiveRecord::Migration
           rescue ActiveRecord::RecordInvalid => ex
             puts "Error saving: #{j.class.to_s}##{j.id} - #{ex.message}"
           end
-          
+
         end
       end
     end

@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -44,11 +45,11 @@ module IssuesHelper
 
     link_to_issue(issue) + "<br /><br />" +
       "<strong>#{@cached_label_project}</strong>: #{link_to_project(issue.project)}<br />" +
-      "<strong>#{@cached_label_status}</strong>: #{issue.status.name}<br />" +
+      "<strong>#{@cached_label_status}</strong>: #{h(issue.status.name)}<br />" +
       "<strong>#{@cached_label_start_date}</strong>: #{format_date(issue.start_date)}<br />" +
       "<strong>#{@cached_label_due_date}</strong>: #{format_date(issue.due_date)}<br />" +
-      "<strong>#{@cached_label_assigned_to}</strong>: #{issue.assigned_to}<br />" +
-      "<strong>#{@cached_label_priority}</strong>: #{issue.priority.name}"
+      "<strong>#{@cached_label_assigned_to}</strong>: #{h(issue.assigned_to)}<br />" +
+      "<strong>#{@cached_label_priority}</strong>: #{h(issue.priority.name)}"
   end
 
   def render_issue_subject_with_tree(issue)
@@ -114,7 +115,7 @@ module IssuesHelper
     # links to #index on issues/show
     url_params = controller_name == 'issues' ? {:controller => 'issues', :action => 'index', :project_id => @project} : params
 
-    content_tag('h3', title) +
+    content_tag('h3', h(title)) +
       queries.collect {|query|
           link_to(h(query.name), url_params.merge(:query_id => query))
         }.join('<br />')
@@ -213,8 +214,8 @@ module IssuesHelper
   def send_notification_option
     content_tag(:p,
                 content_tag(:label,
-                            l(:label_notify_member_plural)) +
-                hidden_field_tag('send_notification', '0') +
+                            l(:label_notify_member_plural), :for => 'send_notification') +
+                hidden_field_tag('send_notification', '0', :id => nil) +
                 check_box_tag('send_notification', '1', true))
 
 

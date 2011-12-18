@@ -11,6 +11,13 @@
 <p><%= f.text_area :description, :rows => 5, :class => 'wiki-edit' %></p>
 <p><%= f.text_field :identifier, :required => true, :size => 60, :disabled => @project.identifier_frozen? %>
 <% unless @project.identifier_frozen? %>
+<script type="text/javascript" charset="utf-8">
+  projectIdentifierMaxLength = <%= Project::IDENTIFIER_MAX_LENGTH %>;
+  projectIdentifierDefault = '<%= @project.identifier %>';
+  projectIdentifierLocked = <%= !@project.identifier.blank? %>;
+  observeProjectIdentifier();
+  observeProjectName();
+</script>
 <br /><em><%= l(:text_length_between, :min => 1, :max => Project::IDENTIFIER_MAX_LENGTH) %> <%= l(:text_project_identifier_info) %></em>
 <% end %></p>
 <p><%= f.text_field :homepage, :size => 60 %></p>
@@ -24,7 +31,7 @@
 </div>
 
 <% if @project.new_record? %>
-<fieldset class="box"><legend><%= l(:label_module_plural) %></legend>
+<fieldset class="box" id="project_modules"><legend><%= l(:label_module_plural) %> <span style="font-size:0.9em">(<%= check_all_links 'project_modules' %>)</span></legend>
 <% Redmine::AccessControl.available_project_modules.each do |m| %>
     <label class="floating">
     <%= check_box_tag 'project[enabled_module_names][]', m, @project.module_enabled?(m), :id => "project_enabled_module_names_#{m}" %>
@@ -38,11 +45,11 @@
 
 <% if @project.new_record? || @project.module_enabled?('issue_tracking') %>
 <% unless @trackers.empty? %>
-<fieldset class="box" id="project_trackers"><legend><%=l(:label_tracker_plural)%></legend>
+<fieldset class="box" id="project_trackers"><legend><%=l(:label_tracker_plural)%> <span style="font-size:0.9em">(<%= check_all_links 'project_trackers' %>)</span></legend>
 <% @trackers.each do |tracker| %>
     <label class="floating">
     <%= check_box_tag 'project[tracker_ids][]', tracker.id, @project.trackers.include?(tracker) %>
-    <%= tracker %>
+    <%= h(tracker) %>
     </label>
 <% end %>
 <%= hidden_field_tag 'project[tracker_ids][]', '' %>
@@ -50,11 +57,11 @@
 <% end %>
 
 <% unless @issue_custom_fields.empty? %>
-<fieldset class="box" id="project_issue_custom_fields"><legend><%=l(:label_custom_field_plural)%></legend>
+<fieldset class="box" id="project_issue_custom_fields"><legend><%=l(:label_custom_field_plural)%> <span style="font-size:0.9em">(<%= check_all_links 'project_issue_custom_fields' %>)</span></legend>
 <% @issue_custom_fields.each do |custom_field| %>
     <label class="floating">
 	<%= check_box_tag 'project[issue_custom_field_ids][]', custom_field.id, (@project.all_issue_custom_fields.include? custom_field), (custom_field.is_for_all? ? {:disabled => "disabled"} : {}) %>
-	<%= custom_field.name %>
+	<%= h(custom_field.name) %>
 	</label>
 <% end %>
 <%= hidden_field_tag 'project[issue_custom_field_ids][]', '' %>

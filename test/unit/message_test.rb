@@ -1,3 +1,4 @@
+#-- encoding: UTF-8
 #-- copyright
 # ChiliProject is a project management system.
 #
@@ -145,6 +146,6 @@ class MessageTest < ActiveSupport::TestCase
       message = Message.new(:board => @board, :subject => 'Test message', :content => 'Test message content', :author => @user)
       assert message.save
     end
-    
+
   end
 end
